@@ -7,10 +7,122 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
+enum EventType {
+  PUBLIC
+  PRIVATE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  BANNED
+}
+
+// ================= USER =================
 model User {
-    id        String   @id @default(uuid())
-    email     String   @unique
-    name      String?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String
+  role        Role     @default(USER)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  events      Event[]        @relation("EventCreator")
+  reviews     Review[]
+  participants Participant[]
+  invitations Invitation[]
+}
+
+// ================= EVENT =================
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  time        String
+  venue       String
+
+  eventType   EventType
+  fee         Float     @default(0)
+  avgRating   Float     @default(0) // optional, backend updates avg on review changes
+
+  creatorId   String
+  creator     User      @relation("EventCreator", fields: [creatorId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  participants Participant[]
+  reviews     Review[]
+  invitations Invitation[]
+}
+
+// ================= PARTICIPATION =================
+model Participant {
+  id            String        @id @default(uuid())
+
+  userId        String
+  eventId       String
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  status        RequestStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(PENDING)
+
+  createdAt     DateTime      @default(now())
+
+  @@unique([userId, eventId])
+}
+
+// ================= INVITATION =================
+model Invitation {
+  id        String   @id @default(uuid())
+
+  eventId   String
+  userId    String
+
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, userId])
+}
+
+// ================= REVIEW =================
+model Review {
+  id        String   @id @default(uuid())
+
+  userId    String
+  eventId   String
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  rating    Int      @default(0) // backend validation required: 1-5
+  comment   String?
+
+  isEdited  Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, eventId])
 }
