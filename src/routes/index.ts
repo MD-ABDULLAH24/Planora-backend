@@ -1,8 +1,8 @@
 // routes/index.ts
 import { Router } from 'express';
 import { AuthRoutes } from '../modules/Auth/auth.route';
+import { UserRoutes } from '../modules/User/user.route';
 // import other module routes when needed
-// import { UserRoutes } from '../modules/user/user.route';
 // import { EventRoutes } from '../modules/event/event.route';
 
 const router = Router();
@@ -14,10 +14,10 @@ const moduleRoutes: { path: string; route: Router }[] = [
     route: AuthRoutes,
   },
   // Uncomment and add other routes when ready
-  // {
-  //   path: '/users',
-  //   route: UserRoutes,
-  // },
+  {
+    path: '/users',
+    route: UserRoutes,
+  },
   // {
   //   path: '/events',
   //   route: EventRoutes,
