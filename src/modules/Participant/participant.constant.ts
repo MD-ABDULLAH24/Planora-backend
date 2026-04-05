@@ -1,0 +1,12 @@
+export const PARTICIPANT_STATUS = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  BANNED: 'BANNED',
+} as const;
+
+export const PAYMENT_STATUS = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED',
+} as const;
