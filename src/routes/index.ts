@@ -5,6 +5,7 @@ import { UserRoutes } from '../modules/User/user.route';
 import { EventRoutes } from '../modules/Event/event.route';
 import { ParticipantRoutes } from '../modules/Participant/participant.route';
 import { InvitationRoutes } from '../modules/Invitation/invitation.route';
+import { ReviewRoutes } from '../modules/Review/review.route';
 // import other module routes when needed
 // import { EventRoutes } from '../modules/event/event.route';
 
@@ -32,6 +33,10 @@ const moduleRoutes: { path: string; route: Router }[] = [
   {
     path: '/invitation',
     route: InvitationRoutes,
+  },
+  {
+    path: '/review',
+    route: ReviewRoutes,
   },
 ];
 
