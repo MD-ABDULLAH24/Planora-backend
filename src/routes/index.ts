@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { AuthRoutes } from '../modules/Auth/auth.route';
 import { UserRoutes } from '../modules/User/user.route';
+import { EventRoutes } from '../modules/Event/event.route';
 // import other module routes when needed
 // import { EventRoutes } from '../modules/event/event.route';
 
@@ -18,10 +19,10 @@ const moduleRoutes: { path: string; route: Router }[] = [
     path: '/users',
     route: UserRoutes,
   },
-  // {
-  //   path: '/events',
-  //   route: EventRoutes,
-  // },
+  {
+    path: '/events',
+    route: EventRoutes,
+  },
 ];
 
 // Register module routes dynamically
