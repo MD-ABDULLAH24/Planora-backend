@@ -32,20 +32,20 @@ enum RequestStatus {
 
 // ================= USER =================
 model User {
-  id          String   @id @default(uuid())
-  name        String
-  email       String   @unique
-  password    String
-  role        Role     @default(USER)
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(USER)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  events      Event[]        @relation("EventCreator")
-  reviews     Review[]
+  events       Event[]       @relation("EventCreator")
+  reviews      Review[]
   participants Participant[]
-  invitations Invitation[]
+  invitations  Invitation[]
 }
 
 // ================= EVENT =================
@@ -57,50 +57,52 @@ model Event {
   time        String
   venue       String
 
-  eventType   EventType
-  fee         Float     @default(0)
-  avgRating   Float     @default(0) // optional, backend updates avg on review changes
+  eventType EventType
+  fee       Float     @default(0)
+  avgRating Float     @default(0) // optional, backend updates avg on review changes
 
-  creatorId   String
-  creator     User      @relation("EventCreator", fields: [creatorId], references: [id])
+  creatorId String
+  creator   User   @relation("EventCreator", fields: [creatorId], references: [id])
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
   participants Participant[]
-  reviews     Review[]
-  invitations Invitation[]
+  reviews      Review[]
+  invitations  Invitation[]
 }
 
 // ================= PARTICIPATION =================
 model Participant {
-  id            String        @id @default(uuid())
+  id String @id @default(uuid())
 
-  userId        String
-  eventId       String
+  userId  String
+  eventId String
 
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   status        RequestStatus @default(PENDING)
   paymentStatus PaymentStatus @default(PENDING)
 
-  createdAt     DateTime      @default(now())
+  payment Payment?
+
+  createdAt DateTime @default(now())
 
   @@unique([userId, eventId])
 }
 
 // ================= INVITATION =================
 model Invitation {
-  id        String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  eventId   String
-  userId    String
-  status    RequestStatus @default(PENDING)
+  eventId String
+  userId  String
+  status  RequestStatus @default(PENDING)
 
-  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -109,21 +111,35 @@ model Invitation {
 
 // ================= REVIEW =================
 model Review {
-  id        String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  userId    String
-  eventId   String
+  userId  String
+  eventId String
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
-  rating    Int      @default(0) // backend validation required: 1-5
-  comment   String?
+  rating  Int     @default(0) // backend validation required: 1-5
+  comment String?
 
-  isEdited  Boolean  @default(false)
+  isEdited Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, eventId])
+}
+
+model Payment {
+  id                 String        @id @default(uuid())
+  transactionId      String        @unique
+  amount             Float
+  status             PaymentStatus @default(PENDING)
+  paymentGatewayData Json?
+
+  participantId String      @unique
+  participant   Participant @relation(fields: [participantId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

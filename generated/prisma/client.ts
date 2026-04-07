@@ -64,3 +64,8 @@ export type Invitation = Prisma.InvitationModel
  * 
  */
 export type Review = Prisma.ReviewModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel

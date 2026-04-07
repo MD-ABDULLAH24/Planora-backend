@@ -12,4 +12,5 @@ export default {
   jwt_refresh_secret: process.env.JWT_REFRESH_SECRET || "refresh secret",
   jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
   bcrypt_salt_rounds: Number(process.env.BCRYPT_SALT_ROUNDS) || 10,
+  stripe_secret_key: process.env.STRIPE_SECRET_KEY,
 }; 

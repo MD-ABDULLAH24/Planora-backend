@@ -1,11 +1,12 @@
 // routes/index.ts
-import { Router } from 'express';
-import { AuthRoutes } from '../modules/Auth/auth.route';
-import { UserRoutes } from '../modules/User/user.route';
-import { EventRoutes } from '../modules/Event/event.route';
-import { ParticipantRoutes } from '../modules/Participant/participant.route';
-import { InvitationRoutes } from '../modules/Invitation/invitation.route';
-import { ReviewRoutes } from '../modules/Review/review.route';
+import { Router } from "express";
+import { AuthRoutes } from "../modules/Auth/auth.route";
+import { UserRoutes } from "../modules/User/user.route";
+import { EventRoutes } from "../modules/Event/event.route";
+import { ParticipantRoutes } from "../modules/Participant/participant.route";
+import { InvitationRoutes } from "../modules/Invitation/invitation.route";
+import { ReviewRoutes } from "../modules/Review/review.route";
+import { PaymentRoutes } from "../modules/payment/payment.route";
 // import other module routes when needed
 // import { EventRoutes } from '../modules/event/event.route';
 
@@ -14,29 +15,33 @@ const router = Router();
 // Module routes configuration
 const moduleRoutes: { path: string; route: Router }[] = [
   {
-    path: '/auth',
+    path: "/auth",
     route: AuthRoutes,
   },
   // Uncomment and add other routes when ready
   {
-    path: '/users',
+    path: "/users",
     route: UserRoutes,
   },
   {
-    path: '/events',
+    path: "/events",
     route: EventRoutes,
   },
   {
-    path: '/participant',
+    path: "/participant",
     route: ParticipantRoutes,
   },
   {
-    path: '/invitation',
+    path: "/invitation",
     route: InvitationRoutes,
   },
   {
-    path: '/review',
+    path: "/review",
     route: ReviewRoutes,
+  },
+  {
+    path: "/payments",
+    route: PaymentRoutes,
   },
 ];
 
